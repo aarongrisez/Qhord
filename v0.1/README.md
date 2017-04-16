@@ -1,6 +1,6 @@
 ## Introducing Qhord
 
-Qboard is a flexible and portable interface for musical improvisation that is governed by a quantum simulation. The simulation currently implements a 7-dimensional quantum simulation which partially collapses due to user input (or "measurements").
+Qhord is a flexible and portable interface for musical improvisation that is governed by a quantum simulation. The simulation currently implements a 7-dimensional quantum simulation which partially collapses due to user input (or "measurements").
 
 ### Pitch Spectrum
 
