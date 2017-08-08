@@ -1,0 +1,186 @@
+#:import FadeTransition kivy.uix.screenmanager.FadeTransition
+#:import DefaultApplication src.DefaultApplication
+
+<Label>:
+    color: .925,.969,.98,1
+
+<CreditsLabel@Label>:
+    pos_hint: {'center_x': 0.5}
+    halign: 'center'
+
+<Credits@BoxLayout>:
+    orientation: 'vertical'
+    CreditsLabel:
+        text_size: root.width * .7, None
+        text: "Credits:"
+        font_size: '40sp'
+    CreditsLabel:
+        text_size: root.width * .7, None
+        text: "Creator: Aaron Grisez"
+        font_size: '30sp'
+    CreditsLabel:
+        text_size: root.width * .7, None
+        text: "Advisor: Justin Dressel"
+        font_size: '30sp'
+    CreditsLabel:
+        text_size: root.width * .7, None
+        text: "Special thanks to the Chapman Office of Undergraduate Research for Funding Support and to everyone who has had a hand in shaping this application. Qhord is very important to me and I am very excited to be able to share it with all of you."
+        font_size: '15sp'
+    CreditsLabel:
+        text_size: root.width * .7, None
+        text: "www.qhord.com" 
+        font_size: '10sp'
+
+<MainScreenManager>:
+    id: screenManager
+    transition: FadeTransition()
+    on_current: app.app_stop()
+    WelcomeScreen:
+        id: welcomeScreen
+        name: 'welcomeScreen'
+#    SpectrumScreen:
+#        id: spectrumScreen
+#        name: 'spectrumScreen'
+    HamiltonianScreen:
+        id: hamiltonianScreen
+        name: 'hamiltonianScreen'
+    DefaultApplicationScreen:
+        id: defaultApp
+        name: 'defaultApplicationScreen'
+        DefaultApplication:
+            id: mainApp
+    CreditsScreen:
+        id: creditsScreen
+        name: 'creditsScreen'
+        canvas.before:
+            Color:
+                rgba: app.colorScheme.Background
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Credits:
+        FloatLayout:
+            Button:
+                size_hint: None, None
+                size: .2 * app.winSize[0], .15 * app.winSize[1]
+                pos: app.winSize[0] * .05, app.winSize[1] * .05
+                text: "Back to Welcome"
+                on_release: root.current = 'welcomeScreen' 
+
+<DefaultApplication>:
+#Main widget on DefaultApplication Screen. Default layout for a 12 pitch system
+    canvas.before:
+        Color:
+            rgba: app.colorScheme.Background
+        Rectangle:
+            size: self.size
+    accidental_display: 'sharps'
+    FloatLayout:
+        RelativeLayout:
+            pos: 0, app.winSize[1] * .8
+            size_hint: None, None
+            size: app.winSize[0], app.winSize[1] * .2
+            BoxLayout:
+                FloatLayout:
+                    size_hint: .3, 1
+                    canvas.before:
+                        Color:
+                            rgba: app.colorScheme.Background
+                        Rectangle
+                            size: self.size
+                            pos: self.pos
+                    BoxLayout:
+                        orientation: 'vertical'
+                        Label:
+                            text: "Pressed"
+                        Label
+                            text: "Heard"
+                FloatLayout:
+                    size_hint: .7, 1
+                    canvas.after:
+                        Color:
+                            rgba: 1,0,0,0
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+                    id: output_window
+        FloatLayout:
+            size_hint: None, None
+            size: app.winSize[0], app.winSize[1] * .8
+            colorScheme: app.colorScheme
+            outputLabels: ["None yet", "None yet"]
+            Button:
+                pos: app.winSize[0] * .05, app.winSize[1] * .05
+                size_hint: None, None
+                size: app.winSize[0] * .2 , app.winSize[1] * .1
+                text: "Change Chords"
+                on_press: root.on_stop()
+                on_release: app.screenManager.current = 'hamiltonianScreen'
+            Button:
+                pos: app.winSize[0] * .8, app.winSize[1] * .05
+                size_hint: None, None
+                size: app.winSize[0] * .15, app.winSize[1] * .1
+                text: "Credits"
+                on_press: root.on_stop()
+                on_release: app.screenManager.current = 'creditsScreen'
+            Key:
+                id: 0
+                pitch_class: 0
+                pos_hint: {'center_x':.1 * 2 - .05, 'center_y': .5582575*1.3}
+                text: "C"
+            Key:
+                id: 1
+                pitch_class: 1
+                pos_hint: {'center_x':.1 * 2.75 -.05, 'center_y': .6166666*1.3}
+                text: "C#"
+            Key:
+                id: 2
+                pitch_class: 2
+                pos_hint: {'center_x':.1 * 3 -.05, 'center_y': .4746666*1.3}
+                text: "D"
+            Key:
+                id: 3
+                pitch_class: 3
+                pos_hint: {'center_x':.1 * 3.75 - .05, 'center_y': .52015621*1.3}
+                text: "D#"
+            Key:
+                id: 4
+                pitch_class: 4
+                pos_hint: {'center_x':.1 * 4 - .05, 'center_y': .36034166*1.3}
+                text: "E"
+            Key:
+                id: 5
+                pitch_class: 5
+                pos_hint: {'center_x':.1 * 5 + .05, 'center_y': .24*1.3}
+                text: "F"
+            Key:
+                id: 6
+                pitch_class: 6
+                pos_hint: {'center_x':.1 * 5.25 + .05, 'center_y': .38333333*1.3}
+                text: "F#"
+            Key:
+                id: 7
+                pitch_class: 7
+                pos_hint: {'center_x':.1 * 6 + .05, 'center_y': .36034166*1.3}
+                text: "G"
+            Key:
+                id: 8
+                pitch_class: 8
+                pos_hint: {'center_x':.1 * 6.25 + .05, 'center_y': .52015621*1.3}
+                text: "G#"
+            Key:
+                id: 9
+                pitch_class: 9
+                pos_hint: {'center_x':.1 * 7 + .05, 'center_y': .47118429*1.3}
+                text: "A"
+            Key:
+                id: 10
+                pitch_class: 10
+                pos_hint: {'center_x':.1 * 7.25 + .05, 'center_y': .61666667*1.3}
+                text: "A#"
+                defaultApplication: root
+            Key:
+                id: 11
+                pitch_class: 11
+                pos_hint: {'center_x':.1 * 8 + .05, 'center_y': .5582575*1.3}
+                text: "B" 

@@ -1,0 +1,21 @@
+<OutputPitchWidget>:
+    size_hint: None, 1
+    width: '50dp'
+    x: app.winSize[0] * .9
+    canvas.before:
+        Color:
+            rgba: 0,1,0,0
+        Rectangle
+            size: self.size
+            pos: self.pos
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            color: root.labelColor
+            pos: (root.pos[0], root.pos[1] + app.winSize[1] * .08)
+            text: app.pitches.numbers[str(root.key)]
+        Label
+            color: root.labelColor
+            pos: (root.pos[0], root.pos[1] - app.winSize[1] * .02)
+            text: app.pitches.numbers[str(root.output)]
+
