@@ -1,0 +1,163 @@
+<DefaultApplicationScreen>:
+    DefaultApplication:
+    
+<WelcomeScreen>:
+    name: "welcome"
+    BoxLayout:
+        Label:
+            text: "Welcome to Qhord!"
+        Button:
+            text: "Go to Main Application"
+            on_press: print("butts")
+            on_release: app.root.current = 'main'
+
+<Key>:
+#Key widget inherits from Button, every pitch is represented by a key. Every key should be the child of DefaultApplication
+    canvas.after:
+        Color:
+            rgba: app.colorScheme.ButtonFill
+        Ellipse:
+            size: self.size
+            pos: self.pos
+    pitch_class: 0
+    on_press: self.parent.parent.measure_system(self.pitch_class)
+    alpha: 0.
+
+<DefaultApplication>:
+#Main widget on DefaultApplication Screen. Default layout for a 12 pitch system
+    name: 'main'
+    FloatLayout:
+        colorScheme: app.colorScheme
+        canvas.before:
+            Color:
+                rgba: app.colorScheme.Background
+            Rectangle:
+                size: root.size
+        outputLabels: ["None yet", "None yet"]
+        Label:
+            pos_hint: {'center_x': .4, 'center_y': .7}
+            text: "Pressed " + str(root.outputLabels[0])
+        Label:
+            pos_hint: {'center_x': .6, 'center_y': .7}
+            text: "Heard " + str(root.outputLabels[1])
+        Key:
+            id: 0
+            pitch_class: 0
+            background_color: 1, 0, 0, self.alpha
+            pos_hint: {'center_x':.1 * 2 - .05, 'center_y': .5582575}
+            text: "C"
+            size_hint_x: None
+            size_hint_y: None
+            width: '40dp'
+            height: '40dp'
+            defaultApplication: root
+        Key:
+            id: 1
+            pitch_class: 1
+            background_color: 1, 0, 0, self.alpha
+            pos_hint: {'center_x':.1 * 2.75 -.05, 'center_y': .6166666}
+            text: "Cs"
+            size_hint_x: None
+            size_hint_y: None
+            width: '40dp'
+            height: '40dp'
+            defaultApplication: root
+        Key:
+            id: 3
+            pitch_class: 3
+            background_color: 1, 0, 0, self.alpha
+            pos_hint: {'center_x':.1 * 3.75 - .05, 'center_y': .52015621}
+            text: "Ds"
+            size_hint_x: None
+            size_hint_y: None
+            width: '40dp'
+            height: '40dp'
+            defaultApplication: root
+        Key:
+            id: 4
+            pitch_class: 4
+            background_color: 1, 0, 0, self.alpha
+            pos_hint: {'center_x':.1 * 4 - .05, 'center_y': .36034166}
+            text: "E"
+            size_hint_x: None
+            size_hint_y: None
+            width: '40dp'
+            height: '40dp'
+            defaultApplication: root
+        Key:
+            id: 5
+            pitch_class: 5
+            background_color: 1, 0, 0, self.alpha
+            pos_hint: {'center_x':.1 * 5 + .05, 'center_y': .2}
+            text: "F"
+            size_hint_x: None
+            size_hint_y: None
+            width: '40dp'
+            height: '40dp'
+            defaultApplication: root
+        Key:
+            id: 6
+            pitch_class: 6
+            background_color: 1, 0, 0, self.alpha
+            pos_hint: {'center_x':.1 * 5.25 + .05, 'center_y': .38333333}
+            text: "Fs"
+            size_hint_x: None
+            size_hint_y: None
+            width: '40dp'
+            height: '40dp'
+            defaultApplication: root
+        Key:
+            id: 7
+            pitch_class: 7
+            background_color: 1, 0, 0, self.alpha
+            pos_hint: {'center_x':.1 * 6 + .05, 'center_y': .36034166}
+            text: "G"
+            size_hint_x: None
+            size_hint_y: None
+            width: '40dp'
+            height: '40dp'
+            defaultApplication: root
+        Key:
+            id: 8
+            pitch_class: 8
+            background_color: 1, 0, 0, self.alpha
+            pos_hint: {'center_x':.1 * 6.25 + .05, 'center_y': .52015621}
+            text: "Gs"
+            size_hint_x: None
+            size_hint_y: None
+            width: '40dp'
+            height: '40dp'
+            defaultApplication: root
+        Key:
+            id: 9
+            pitch_class: 9
+            background_color: 1, 0, 0, self.alpha
+            pos_hint: {'center_x':.1 * 7 + .05, 'center_y': .47118429}
+            text: "A"
+            size_hint_x: None
+            size_hint_y: None
+            width: '40dp'
+            height: '40dp'
+            defaultApplication: root
+        Key:
+            id: 10
+            pitch_class: 10
+            background_color: 1, 0, 0, self.alpha
+            pos_hint: {'center_x':.1 * 7.25 + .05, 'center_y': .61666667}
+            text: "As"
+            size_hint_x: None
+            size_hint_y: None
+            width: '40dp'
+            height: '40dp'
+            defaultApplication: root
+        Key:
+            id: 11
+            pitch_class: 11
+            background_color: 1, 0, 0, self.alpha
+            pos_hint: {'center_x':.1 * 8 + .05, 'center_y': .5582575}
+            text: "B" 
+            size_hint_x: None
+            size_hint_y: None
+            width: '40dp'
+            height: '40dp'
+            defaultApplication: root
