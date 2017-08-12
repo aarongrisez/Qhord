@@ -15,3 +15,8 @@ Making v0.2 default:
 git mv v0.2/* .
 git rm -r v0.2/
 ```
+
+Removing DS_Store's:
+```
+find . -name .DS_Store -print0 | xargs -0 git rm -f --ignore-unmatch
+```
