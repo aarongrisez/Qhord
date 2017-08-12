@@ -58,10 +58,6 @@ End with an example of getting some data out of the system or using it for a lit
 
 Please reach out to us at [http://qhord.com/](http://qhord.com/) for info about contributing.
 
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
-
 ## Authors
 
 * **Aaron Grisez** - *Initial work* - [Aaron Grisez](https://github.com/aarongrisez)
