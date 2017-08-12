@@ -6,7 +6,7 @@ from kivy.uix.widget import Widget
 from kivy.animation import Animation
 from kivy.core.window import Window
 
-Builder.load_file('src/OutputPitchWidget.kv')
+Builder.load_file('src/kv/OutputPitchWidget.kv')
 
 class OutputPitchWidget(Widget):
     key = StringProperty('0')

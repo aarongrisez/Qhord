@@ -59,8 +59,6 @@ class DefaultApplication(Widget):
             self.holder1[(i[0] + self.root1) % self.n] = i[1] #Transpose atom to root of Chord1
             self.holder2[(i[0] + self.root2) % self.n] = i[1] #Transpose atom to root of Chord1
         self.system = Qsys.Qsys(12, self.holder1, 0.01, self.frequency,self.spectrum, self.holder1, self.holder2, self.root1, self.root2)
-        #THIS LINE IS PROBLEMATIC
-        #self.parent.parent.tracker.create_snapshot('Created Default Application')
 
     def solve_ode(self, *args):
         self.system.run()
@@ -73,7 +71,6 @@ class DefaultApplication(Widget):
         self.outputLabels = [self.system.lastKey, self.system.lastOutput]
         self.playFunction() 
         self.measured = True
-        self.parent.parent.tracker.create_snapshot('Measured System')
 
     def playSinglePitch(self):
         if self.keys[self.outputLabels[1]].state == 'play':

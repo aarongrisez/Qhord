@@ -10,15 +10,17 @@ from kivy.clock import Clock
 from settingsjson import settings_json
 from kivy.lang import Builder
 from kivy.logger import Logger
-from pympler.classtracker import ClassTracker
 import numpy as np
 
 #Builder.load_file('SpectrumScreen.kv')
-Builder.load_file('HamiltonianScreen.kv')
-Builder.load_file('src/WelcomeScreen.kv')
-Builder.load_file('src/key.kv')
+Builder.load_file('src/kv/HamiltonianScreen.kv')
+Builder.load_file('src/kv/WelcomeScreen.kv')
+Builder.load_file('src/kv/key.kv')
 
 def WinClass(size):
+    """
+    This class contains information about the window created for the app
+    """
     aspectRatio = size[0] / size[1]
     if aspectRatio == 4./3:
         return '4:3' 
@@ -116,27 +118,29 @@ class MainApp(App):
     def build(self):
         self.colorScheme = ColorScheme()
         self.spectra = Spectra()
-        self.tracker = ClassTracker()
         self.winSize = (float(Window.width), float(Window.height))
         self.winClass = WinClass((float(Window.width), float(Window.height)))
         Logger.info('Build: Using WindowClass ' + str(self.winClass))
         self.widgetSizes = WidgetDefaults(self.winClass)
         self.screenManager = MainScreenManager()
-        self.tracker.track_object(self.screenManager)
         self.mainLoop = Clock.schedule_once(self.initializeEmptyApp)
         self.pitches = PitchesSharps()
+        Logger.info('Build: App build successful')
         return self.screenManager
 
     def on_pause(self):
         self.get_running_app.stop()
         self.tracker.stats.print_summary()
+        Logger.info('Runtime: Pausing application')
 
     def app_start(self):
         self.screenManager.ids['defaultApp'].children[0].schedule()
+        Logger.info('Runtime: Starting application')
 
     def app_stop(self):
         if self.screenManager.current != 'defaultApplicationScreen':
             self.mainLoop.cancel()        
+        Logger.info('Runtime: Stopping application')
 
 if __name__=="__main__":
     MainApp().run()
