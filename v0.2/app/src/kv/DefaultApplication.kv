@@ -1,0 +1,57 @@
+<DefaultApplication>:
+#Main widget on DefaultApplication Screen. Default layout for a 12 pitch system
+    canvas.before:
+        Color:
+            rgba: app.colorScheme.Background
+        Rectangle:
+            size: self.size
+    accidental_display: 'sharps'
+    FloatLayout:
+        RelativeLayout:
+            pos: 0, app.winSize[1] * .8
+            size_hint: None, None
+            size: app.winSize[0], app.winSize[1] * .2
+            BoxLayout:
+                FloatLayout:
+                    size_hint: .3, 1
+                    canvas.before:
+                        Color:
+                            rgba: app.colorScheme.Background
+                        Rectangle
+                            size: self.size
+                            pos: self.pos
+                    BoxLayout:
+                        orientation: 'vertical'
+                        Label:
+                            text: "Pressed"
+                        Label
+                            text: "Heard"
+                FloatLayout:
+                    size_hint: .7, 1
+                    canvas.after:
+                        Color:
+                            rgba: 1,0,0,0
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+                    id: output_window
+        FloatLayout:
+            id: main_window
+            size_hint: None, None
+            size: app.winSize[0], app.winSize[1] * .8
+            colorScheme: app.colorScheme
+            outputLabels: ["None yet", "None yet"]
+            Button:
+                pos: app.winSize[0] * .05, app.winSize[1] * .05
+                size_hint: None, None
+                size: app.winSize[0] * .2 , app.winSize[1] * .1
+                text: "Change Chords"
+                on_press: root.on_stop()
+                on_release: app.screenManager.current = 'hamiltonianScreen'
+            Button:
+                pos: app.winSize[0] * .8, app.winSize[1] * .05
+                size_hint: None, None
+                size: app.winSize[0] * .15, app.winSize[1] * .1
+                text: "Credits"
+                on_press: root.on_stop()
+                on_release: app.screenManager.current = 'creditsScreen'

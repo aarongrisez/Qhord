@@ -1,0 +1,71 @@
+#:import FadeTransition kivy.uix.screenmanager.FadeTransition
+#:import DefaultApplication src.DefaultApplication
+
+<Label>:
+    color: .925,.969,.98,1
+
+<CreditsLabel@Label>:
+    pos_hint: {'center_x': 0.5}
+    halign: 'center'
+
+<Credits@BoxLayout>:
+    orientation: 'vertical'
+    CreditsLabel:
+        text_size: root.width * .7, None
+        text: "Credits:"
+        font_size: '40sp'
+    CreditsLabel:
+        text_size: root.width * .7, None
+        text: "Creator: Aaron Grisez"
+        font_size: '30sp'
+    CreditsLabel:
+        text_size: root.width * .7, None
+        text: "Advisor: Justin Dressel"
+        font_size: '30sp'
+    CreditsLabel:
+        text_size: root.width * .7, None
+        text: "Special thanks to the Chapman Office of Undergraduate Research for Funding Support and to everyone who has had a hand in shaping this application. Qhord is very important to me and I am very excited to be able to share it with all of you."
+        font_size: '15sp'
+    CreditsLabel:
+        text_size: root.width * .7, None
+        text: "www.qhord.com" 
+        font_size: '10sp'
+
+<MainScreenManager>:
+    id: screenManager
+    transition: FadeTransition()
+    on_current: app.app_stop()
+    WelcomeScreen:
+        id: welcomeScreen
+        name: 'welcomeScreen'
+#    SpectrumScreen:
+#        id: spectrumScreen
+#        name: 'spectrumScreen'
+    HamiltonianScreen:
+        id: hamiltonianScreen
+        name: 'hamiltonianScreen'
+    DefaultApplicationScreen:
+        id: defaultAppScreen
+        name: 'defaultApplicationScreen'
+    CustomizeHamiltonianScreen:
+        id: customizeHamiltonianScreen
+        name: 'customizeHamiltonianScreen'
+    CreditsScreen:
+        id: creditsScreen
+        name: 'creditsScreen'
+        canvas.before:
+            Color:
+                rgba: app.colorScheme.Background
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Credits:
+        FloatLayout:
+            Button:
+                size_hint: None, None
+                size: .2 * app.winSize[0], .15 * app.winSize[1]
+                pos: app.winSize[0] * .05, app.winSize[1] * .05
+                text: "Back to Welcome"
+                on_release: root.current = 'welcomeScreen' 
+
+
