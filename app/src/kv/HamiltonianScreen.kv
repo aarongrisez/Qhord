@@ -1,12 +1,12 @@
-<ChordToggleButton@ToggleButton>
+<ChordToggleButton>
     size_hint: 1, .8
     group: "chord"
     on_press: app.screenManager.ids['hamiltonianScreen'].chord = self.text
-<Root1ToggleButton@ToggleButton>
+<Root1ToggleButton>
     size_hint: 1, .8
     group: "root1"
     on_press: app.screenManager.ids['hamiltonianScreen'].root1 = app.pitches.letters[self.text]
-<Root2ToggleButton@ToggleButton>
+<Root2ToggleButton>
     size_hint: 1, .8
     group: "root2"
     on_press: app.screenManager.ids['hamiltonianScreen'].root2 = app.pitches.letters[self.text]

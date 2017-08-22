@@ -51,6 +51,15 @@ class SpectrumScreen(Screen):
             self.psi_not = self.psi_not / norm #Normalizes the initial condition immediately
         self.ids['psi_notLabel'].text = str(np.around(self.psi_not, decimals=2))
 
+class ChordToggleButton(ToggleButton):
+    pass
+
+class Root1ToggleButton(ToggleButton):
+    pass
+
+class Root2ToggleButton(ToggleButton):
+    pass
+
 class HamiltonianScreen(Screen):
     chord = StringProperty('Major')
     frequency = NumericProperty(10.0)
@@ -59,8 +68,8 @@ class HamiltonianScreen(Screen):
 
     def __init__(self, **kwargs):
         super(HamiltonianScreen, self).__init__()
-        ####STOPPED HERE!!!! Need to get class definitions for root1 and root2 buttons
-        #self.root1Buttons = [Key(pitch_class=i, x=int(self.buttonPositions[0][i]), y=int(self.buttonPositions[1][i]), text=str(self.pitches_from_num[str(i)])) for i in range(self.n)]
+        #STOPPED HERE!!!! Need to get class definitions for root1 and root2 buttons
+        self.root1Buttons = [Root1ToggleButton() for i in range(self.n)]
         #for i in range(self.n):
         #    self.ids['main_window'].add_widget(self.keyWidgets[i])
         Logger.info('Build: Hamiltonian Screen Built')
