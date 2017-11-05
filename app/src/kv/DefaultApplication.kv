@@ -1,4 +1,4 @@
-<DefaultApplication>:
+<DefaultApplicationScreen>:
 #Main widget on DefaultApplication Screen. Default layout for a 12 pitch system
     canvas.before:
         Color:
@@ -6,7 +6,17 @@
         Rectangle:
             size: self.size
     accidental_display: 'sharps'
-    FloatLayout:
+    on_enter:
+        #I'm passing things through methods like this rather than setting them directly because it makes the code more readable and there are fewer side effects
+        inSpectrum = app.spectra.defaults[app.screenManager.ids['hamiltonianScreen'].chord]
+        inFrequency = float(app.screenManager.ids['hamiltonianScreen'].frequency)
+        inRoot1 = int(app.screenManager.ids['hamiltonianScreen'].root1)
+        inRoot2 = int(app.screenManager.ids['hamiltonianScreen'].root2)
+        self.startSimulation(inSpectrum, inSpectrum, inFrequency, inRoot1, inRoot2)
+    on_leave:
+        self.stopSimulation()
+    
+    RelativeLayout:
         RelativeLayout:
             pos: 0, app.winSize[1] * .8
             size_hint: None, None
@@ -35,7 +45,7 @@
                             size: self.size
                             pos: self.pos
                     id: output_window
-        FloatLayout:
+        RelativeLayout:
             id: main_window
             size_hint: None, None
             size: app.winSize[0], app.winSize[1] * .8

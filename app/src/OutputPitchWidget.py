@@ -28,4 +28,5 @@ class OutputPitchWidget(Widget):
         self.animation.start(self)
         
     def stop(self, arg1, arg2):
-        self.parent.remove_widget(self)
+		if(self.parent is not None):
+			self.parent.remove_widget(self)
