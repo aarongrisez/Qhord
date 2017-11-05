@@ -86,8 +86,8 @@ class MainApp(App):
 #        psi_not = self.screenManager.ids['spectrumScreen'].psi_not
 #        self.screenManager.ids['defaultApp'].children[0].on_start(spectrum, psi_not)
  
-    def initializeApp(self, *kwargs):
-        spectrum = self.spectra.defaults[self.screenManager.ids['hamiltonianScreen'].chord]
+    #def initializeApp(self, *kwargs):
+     #   spectrum = self.spectra.defaults[self.screenManager.ids['hamiltonianScreen'].chord]
       #  frequency = float(self.screenManager.ids['hamiltonianScreen'].frequency)
     #root1 = int(self.screenManager.ids['hamiltonianScreen'].root1)
      #   root2 = int(self.screenManager.ids['hamiltonianScreen'].root2)
