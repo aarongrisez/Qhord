@@ -136,8 +136,8 @@ class DefaultApplicationScreen(Screen):
             self.keys[self.outputLabels[1]].stop()
         self.keys[self.outputLabels[1]].play()
 
-    def addOutputWidget(self):
-        outputPitchWidget = OutputPitchWidget.OutputPitchWidget()
+    def addOutputWidget(self,output,key):
+        outputPitchWidget = OutputPitchWidget.OutputPitchWidget(output,key)
         self.ids['output_window'].add_widget(outputPitchWidget)
         outputPitchWidget.start()
 
@@ -153,6 +153,6 @@ class DefaultApplicationScreen(Screen):
         elif self.measured == True:
             self.outputs.append(self.system.lastOutput)
             self.presses.append(self.system.lastKey)
-            self.addOutputWidget()
+            self.addOutputWidget(self.system.lastOutput,self.system.lastKey)
             self.measured = False
 

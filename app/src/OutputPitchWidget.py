@@ -5,6 +5,7 @@ from kivy.lang import Builder
 from kivy.uix.widget import Widget
 from kivy.animation import Animation
 from kivy.core.window import Window
+from kivy.logger import Logger
 
 Builder.load_file('src/kv/OutputPitchWidget.kv')
 
@@ -12,14 +13,14 @@ class OutputPitchWidget(Widget):
     key = StringProperty('0')
     output = StringProperty('0')
     labelColor = ListProperty([1,1,1,0])
+    
+    def __init__(self,argOutput,argKey):
+		super(OutputPitchWidget,self).__init__()
+		self.output = str(argOutput)
+		self.key = str(argKey)
 
     def start(self):
-        self.set_keyOut()
         self.scroll()
-
-    def set_keyOut(self):
-        self.key = str(self.parent.parent.parent.parent.parent.system.lastKey)
-        self.output = str(self.parent.parent.parent.parent.parent.system.lastOutput)
 
     def scroll(self):
         self.animation = Animation(labelColor=[1,1,1,1], duration=.5) 
