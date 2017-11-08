@@ -3,7 +3,7 @@
 A toy for playing quantum music.
 This repository currently only contains the first prototype release of the Qhord project.
 
-![logo](https://i2.wp.com/www.qhord.com/wp-content/uploads/2017/07/cropped-logo_transparent_background-1.png?w=354&ssl=1)
+![logo](https://www.qhord.com/wp-content/uploads/2017/10/cropped-Qhord-Logo-color-2.png)
 
 Website: [qhord](http://qhord.com/)
 
