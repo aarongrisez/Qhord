@@ -16,11 +16,11 @@
             size: .4 * app.winSize[0], .15 * app.winSize[1]
             pos_hint: {'center_x': .5, 'center_y': .4}
             text: 'Enter App'
-#            on_press: root.current = 'spectrumScreen'
-            on_press: self.parent.parent.parent.current = 'hamiltonianScreen'
+#            on_press: app.root.current = 'spectrumScreen'
+            on_press: app.root.current = 'hamiltonianScreen'
         Button:
             size_hint: None, None
             size: .4 * app.winSize[0], .15 * app.winSize[1]
             pos_hint: {'center_x': .5, 'center_y': .2}
             text: "Credits"
-            on_release: self.parent.parent.parent.current = 'creditsScreen' 
+            on_release: app.root.current = 'creditsScreen' 
