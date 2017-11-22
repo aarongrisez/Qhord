@@ -6,7 +6,7 @@ from kivy.core.window import Window
 from kivy.properties import ListProperty
 from kivy.properties import NumericProperty
 from kivy.properties import StringProperty
-from src import DefaultApplication
+from src import KeyboardScreen
 from src import Defaults
 from kivy.clock import Clock
 from settingsjson import settings_json
@@ -17,7 +17,7 @@ import numpy as np
 #Builder.load_file('SpectrumScreen.kv')
 Builder.load_file('src/kv/HamiltonianScreen.kv')
 Builder.load_file('src/kv/WelcomeScreen.kv')
-Builder.load_file('src/kv/DefaultApplication.kv')
+Builder.load_file('src/kv/KeyboardScreen.kv')
 Builder.load_file('src/kv/key.kv')
 Builder.load_file('src/kv/CustomizeHamiltonianScreen.kv')
 
@@ -100,11 +100,11 @@ class MainApp(App):
         Logger.info('Runtime: Pausing application')
 
     def app_start(self):
-        self.screenManager.ids['defaultAppScreen'].children[0].schedule()
+        self.screenManager.ids['keyboardScreen'].children[0].schedule()
         Logger.info('OOGABOOGAOOGABOOGA WHY DO I NEVER RUN???')
 
     def app_stop(self):
-        if self.screenManager.current != 'defaultApplicationScreen':
+        if self.screenManager.current != 'keyboardScreen':
             self.mainLoop.cancel()        
         Logger.info('Runtime: Stopping application')
 

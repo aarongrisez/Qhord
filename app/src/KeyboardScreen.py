@@ -18,19 +18,23 @@ from kivy.logger import Logger
 import copy
 
 
-
 class Key(Button):
     alpha = NumericProperty(0.0)
     pitch_class = NumericProperty()
+    systemRef = '' #So that each key has a reference to the system (NOT a copy of the system)
+    
+    def __init__(self, inPC, inSys, x, y, text):
+        """Initializes the key
+        """
+        super(Key,self).__init__(x=x,y=y,text=text)
+        self.pitch_class = inPC
+        self.systemRef = inSys
 
     def update_alpha(self):
-        self.alpha = float(np.power((self.parent.parent.parent.system.get_probs()[self.pitch_class]), 1/1.2))
+        self.alpha = float(np.power((self.systemRef.get_probs()[self.pitch_class]), 1/1.2))
 
 
-
-class DefaultApplicationScreen(Screen):
-    """
-    """
+class KeyboardScreen(Screen):
     outputLabels = ListProperty()
     keys = ListProperty()
     winHeight = NumericProperty()
@@ -45,7 +49,7 @@ class DefaultApplicationScreen(Screen):
     def __init__(self, **kwargs):
         """Initializes this Screen by doing everything that only needs to happen once.
         """
-        super(DefaultApplicationScreen, self).__init__()
+        super(KeyboardScreen, self).__init__()
         self.SOUND_PATH = 'src/assets/sounds/piano/'
         self.SOUND_EXT = '.wav'
         self.pitches_from_num = Defaults.PitchesSharps().numbers
@@ -80,7 +84,7 @@ class DefaultApplicationScreen(Screen):
             self.holder2[(i[0] + self.root2) % self.n] = i[1] #Transpose atom to root of Chord1
         self.system = Qsys.Qsys(12, self.holder1, 0.01, self.frequency,self.spectrum, self.holder1, self.holder2, self.root1, self.root2)
         self.buttonPositions = self.setButtonPositions()
-        self.keyWidgets = [Key(pitch_class=i, x=int(self.buttonPositions[0][i]), y=int(self.buttonPositions[1][i]), text=str(self.pitches_from_num[str(i)])) for i in range(self.n)]
+        self.keyWidgets = [Key(i, self.system, int(self.buttonPositions[0][i]), int(self.buttonPositions[1][i]), str(self.pitches_from_num[str(i)])) for i in range(self.n)]
         for i in range(self.n):
             self.ids['main_window'].add_widget(self.keyWidgets[i])
         self.main_loop = Clock.schedule_interval(self.application_loop, 1 / 30.)
