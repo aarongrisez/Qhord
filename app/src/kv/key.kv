@@ -13,7 +13,7 @@
             size: self.size
             pos: self.pos
     pitch_class: 0
-    on_press: self.parent.parent.parent.measure_system(self.pitch_class)
+    on_press: app.screenManager.ids['defaultAppScreen'].measure_system(self.pitch_class)
     alpha: 0.
     background_color: 0, 0, 0, 0
     size_hint: None, None

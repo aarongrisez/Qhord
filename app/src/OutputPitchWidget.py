@@ -20,9 +20,6 @@ class OutputPitchWidget(Widget):
 		self.key = str(argKey)
 
     def start(self):
-        self.scroll()
-
-    def scroll(self):
         self.animation = Animation(labelColor=[1,1,1,1], duration=.5) 
         self.animation &= Animation(pos=(Window.width * .3, self.y), duration=3.5) + Animation(labelColor=[1,1,1,0], duration=.1)
         self.animation.bind(on_complete = self.stop)

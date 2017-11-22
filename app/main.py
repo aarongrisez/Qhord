@@ -76,23 +76,8 @@ class HamiltonianScreen(Screen):
         #    self.ids['main_window'].add_widget(self.keyWidgets[i])
         Logger.info('Build: Hamiltonian Screen Built')
 
-#class DefaultApplicationScreen(Screen):
-#    pass
 
 class MainApp(App):
-
-#    def initializeApp(self, *kwargs):
-#        spectrum = self.screenManager.ids['spectrumScreen'].spectrum
-#        psi_not = self.screenManager.ids['spectrumScreen'].psi_not
-#        self.screenManager.ids['defaultApp'].children[0].on_start(spectrum, psi_not)
- 
-    #def initializeApp(self, *kwargs):
-     #   spectrum = self.spectra.defaults[self.screenManager.ids['hamiltonianScreen'].chord]
-      #  frequency = float(self.screenManager.ids['hamiltonianScreen'].frequency)
-    #root1 = int(self.screenManager.ids['hamiltonianScreen'].root1)
-     #   root2 = int(self.screenManager.ids['hamiltonianScreen'].root2)
-      #  self.screenManager.ids['defaultAppScreen'].add_widget(DefaultApplication.DefaultApplication(spectrum, spectrum, frequency, root1, root2))
-
     def initializeEmptyApp(self, *kwargs):
     	pass
 
@@ -115,7 +100,7 @@ class MainApp(App):
         Logger.info('Runtime: Pausing application')
 
     def app_start(self):
-        self.screenManager.ids['blah'].children[0].schedule()
+        self.screenManager.ids['defaultAppScreen'].children[0].schedule()
         Logger.info('OOGABOOGAOOGABOOGA WHY DO I NEVER RUN???')
 
     def app_stop(self):

@@ -42,7 +42,7 @@ class DefaultApplicationScreen(Screen):
     main_loop = ''
     
 
-    def __init__(self, argSpectrum=[0], argPsi_not=[0], argFrequency=0., argRoot1=0, argRoot2=0, **kwargs):
+    def __init__(self, **kwargs):
         """Initializes this Screen by doing everything that only needs to happen once.
         """
         super(DefaultApplicationScreen, self).__init__()
