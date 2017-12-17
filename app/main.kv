@@ -1,5 +1,5 @@
 #:import FadeTransition kivy.uix.screenmanager.FadeTransition
-#:import DefaultApplication src.DefaultApplication
+#:import KeyboardScreen src.KeyboardScreen
 
 <Label>:
     color: .925,.969,.98,1
@@ -44,9 +44,9 @@
     HamiltonianScreen:
         id: hamiltonianScreen
         name: 'hamiltonianScreen'
-    DefaultApplicationScreen:
-        id: defaultAppScreen
-        name: 'defaultApplicationScreen'
+    KeyboardScreen:
+        id: keyboardScreen
+        name: 'keyboardScreen'
     CustomizeHamiltonianScreen:
         id: customizeHamiltonianScreen
         name: 'customizeHamiltonianScreen'
@@ -66,6 +66,6 @@
                 size: .2 * app.winSize[0], .15 * app.winSize[1]
                 pos: app.winSize[0] * .05, app.winSize[1] * .05
                 text: "Back to Welcome"
-                on_release: root.current = 'welcomeScreen' 
+                on_release: root.current = 'welcomeScreen'
 
 

@@ -1,11 +1,12 @@
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.togglebutton import ToggleButton
 from kivy.core.window import Window
 from kivy.properties import ListProperty
 from kivy.properties import NumericProperty
 from kivy.properties import StringProperty
-from src import DefaultApplication
+from src import KeyboardScreen
 from src import Defaults
 from kivy.clock import Clock
 from settingsjson import settings_json
@@ -16,7 +17,7 @@ import numpy as np
 #Builder.load_file('SpectrumScreen.kv')
 Builder.load_file('src/kv/HamiltonianScreen.kv')
 Builder.load_file('src/kv/WelcomeScreen.kv')
-Builder.load_file('src/kv/DefaultApplication.kv')
+Builder.load_file('src/kv/KeyboardScreen.kv')
 Builder.load_file('src/kv/key.kv')
 Builder.load_file('src/kv/CustomizeHamiltonianScreen.kv')
 
@@ -65,6 +66,7 @@ class HamiltonianScreen(Screen):
     frequency = NumericProperty(10.0)
     root1 = NumericProperty(0)
     root2 = NumericProperty(7)
+    n = NumericProperty(2)
 
     def __init__(self, **kwargs):
         super(HamiltonianScreen, self).__init__()
@@ -74,23 +76,8 @@ class HamiltonianScreen(Screen):
         #    self.ids['main_window'].add_widget(self.keyWidgets[i])
         Logger.info('Build: Hamiltonian Screen Built')
 
-class DefaultApplicationScreen(Screen):
-    pass
 
 class MainApp(App):
-
-#    def initializeApp(self, *kwargs):
-#        spectrum = self.screenManager.ids['spectrumScreen'].spectrum
-#        psi_not = self.screenManager.ids['spectrumScreen'].psi_not
-#        self.screenManager.ids['defaultApp'].children[0].on_start(spectrum, psi_not)
- 
-    def initializeApp(self, *kwargs):
-        spectrum = self.spectra.defaults[self.screenManager.ids['hamiltonianScreen'].chord]
-        frequency = float(self.screenManager.ids['hamiltonianScreen'].frequency)
-        root1 = int(self.screenManager.ids['hamiltonianScreen'].root1)
-        root2 = int(self.screenManager.ids['hamiltonianScreen'].root2)
-        self.screenManager.ids['defaultAppScreen'].add_widget(DefaultApplication.DefaultApplication(spectrum, spectrum, frequency, root1, root2))
-
     def initializeEmptyApp(self, *kwargs):
     	pass
 
@@ -104,7 +91,7 @@ class MainApp(App):
         self.screenManager = MainScreenManager()
         self.mainLoop = Clock.schedule_once(self.initializeEmptyApp)
         self.pitches = Defaults.PitchesSharps()
-        Logger.info('Build: App build successful')
+        Logger.info('Build: App build successful: ')
         return self.screenManager
 
     def on_pause(self):
@@ -113,11 +100,11 @@ class MainApp(App):
         Logger.info('Runtime: Pausing application')
 
     def app_start(self):
-        self.screenManager.ids['defaultAppScreen'].children[0].schedule()
-        Logger.info('Runtime: Starting application')
+        self.screenManager.ids['keyboardScreen'].children[0].schedule()
+        Logger.info('OOGABOOGAOOGABOOGA WHY DO I NEVER RUN???')
 
     def app_stop(self):
-        if self.screenManager.current != 'defaultApplicationScreen':
+        if self.screenManager.current != 'keyboardScreen':
             self.mainLoop.cancel()        
         Logger.info('Runtime: Stopping application')
 

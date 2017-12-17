@@ -10,22 +10,31 @@ from kivy.properties import StringProperty
 from kivy.core.window import Window
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
+from kivy.uix.screenmanager import Screen
 from kivy.core.audio import SoundLoader
 from kivy.lang import Builder
 from kivy.clock import Clock
 from kivy.logger import Logger
 import copy
 
+
 class Key(Button):
     alpha = NumericProperty(0.0)
     pitch_class = NumericProperty()
+    systemRef = '' #So that each key has a reference to the system (NOT a copy of the system)
+    
+    def __init__(self, inPC, inSys, x, y, text):
+        """Initializes the key
+        """
+        super(Key,self).__init__(x=x,y=y,text=text)
+        self.pitch_class = inPC
+        self.systemRef = inSys
 
     def update_alpha(self):
-        self.alpha = float(np.power((self.parent.parent.parent.system.get_probs()[self.pitch_class]), 1/1.2))
+        self.alpha = float(np.power((self.systemRef.get_probs()[self.pitch_class]), 1/1.2))
 
-class DefaultApplication(Widget):
-    """
-    """
+
+class KeyboardScreen(Screen):
     outputLabels = ListProperty()
     keys = ListProperty()
     winHeight = NumericProperty()
@@ -34,22 +43,35 @@ class DefaultApplication(Widget):
     presses = ListProperty()
     measured = BooleanProperty()
     buttonPositions = ListProperty()
+    main_loop = ''
+    
 
-    def __init__(self, argSpectrum=[0], argPsi_not=[0], argFrequency=0., argRoot1=0, argRoot2=0, **kwargs):
-        super(DefaultApplication, self).__init__()
+    def __init__(self, **kwargs):
+        """Initializes this Screen by doing everything that only needs to happen once.
+        """
+        super(KeyboardScreen, self).__init__()
         self.SOUND_PATH = 'src/assets/sounds/piano/'
         self.SOUND_EXT = '.wav'
         self.pitches_from_num = Defaults.PitchesSharps().numbers
-        self.first = True
-        self.playbackLoop = Clock.schedule_once(self.emptyFunct)
+        self.playFunction = self.playSinglePitch
+        self.winHeight = Window.size[1]
+        self.winWidth = Window.size[0]
+        self.outputs = []
+        self.presses = []
+        self.measured = False
+        
+    def startSimulation(self, argSpectrum=[0], argPsi_not=[0], argFrequency=0., argRoot1=0, argRoot2=0):
+        """Runs every time the simulation starts, 
+           initializing everything user-choice dependent.
+        """
         self.spectrum = argSpectrum
         self.n = len(self.spectrum)
         self.psi_not = argPsi_not
         self.frequency = argFrequency
-        self.playFunction = self.playSinglePitch
         self.root1 = argRoot1
         self.root2 = argRoot2
         self.holder1 = np.zeros(len(self.spectrum))
+        self.first = True
         self.holder2 = np.zeros(len(self.spectrum))
         self.outputLabels = [None for i in range(self.n)]
         self.keyslist = [None for i in range(self.n)]
@@ -61,17 +83,26 @@ class DefaultApplication(Widget):
             self.holder1[(i[0] + self.root1) % self.n] = i[1] #Transpose atom to root of Chord1
             self.holder2[(i[0] + self.root2) % self.n] = i[1] #Transpose atom to root of Chord1
         self.system = Qsys.Qsys(12, self.holder1, 0.01, self.frequency,self.spectrum, self.holder1, self.holder2, self.root1, self.root2)
-        self.winHeight = Window.size[1]
-        self.winWidth = Window.size[0]
-        self.outputs = []
-        self.presses = []
-        self.measured = False
         self.buttonPositions = self.setButtonPositions()
-        self.keyWidgets = [Key(pitch_class=i, x=int(self.buttonPositions[0][i]), y=int(self.buttonPositions[1][i]), text=str(self.pitches_from_num[str(i)])) for i in range(self.n)]
+        self.keyWidgets = [Key(i, self.system, int(self.buttonPositions[0][i]), int(self.buttonPositions[1][i]), str(self.pitches_from_num[str(i)])) for i in range(self.n)]
         for i in range(self.n):
             self.ids['main_window'].add_widget(self.keyWidgets[i])
+        self.main_loop = Clock.schedule_interval(self.application_loop, 1 / 30.)
         Logger.info('DefaultApp: Default App Initialized with ' + str(self.n) + ' keys')
-        self.schedule()
+        
+    def stopSimulation(self):
+        """Stops the simulation, deleting all simulation-specific data that's big enough to matter or shows up on the screen 
+           and killing the Qsys to free up memory and CPU time.
+        """
+        Clock.unschedule(self.application_loop)
+        self.system = ''
+        keyWidgets = []
+        outputs = []
+        presses = []
+        for outputWidget in self.ids['output_window'].children:
+            self.ids['output_window'].remove_widget(outputWidget)
+        for keyWidget in self.keyWidgets:
+            self.ids['main_window'].remove_widget(keyWidget)
 
     def emptyFunct(self, args):
         pass
@@ -109,8 +140,8 @@ class DefaultApplication(Widget):
             self.keys[self.outputLabels[1]].stop()
         self.keys[self.outputLabels[1]].play()
 
-    def addOutputWidget(self):
-        outputPitchWidget = OutputPitchWidget.OutputPitchWidget()
+    def addOutputWidget(self,output,key):
+        outputPitchWidget = OutputPitchWidget.OutputPitchWidget(output,key)
         self.ids['output_window'].add_widget(outputPitchWidget)
         outputPitchWidget.start()
 
@@ -126,10 +157,6 @@ class DefaultApplication(Widget):
         elif self.measured == True:
             self.outputs.append(self.system.lastOutput)
             self.presses.append(self.system.lastKey)
-            self.addOutputWidget()
+            self.addOutputWidget(self.system.lastOutput,self.system.lastKey)
             self.measured = False
-    
-    def schedule(self):
-        self.playbackLoop.cancel()
-        self.main_loop = Clock.schedule_interval(self.application_loop, 1 / 30.)
 

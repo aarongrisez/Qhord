@@ -3,7 +3,6 @@
 import numpy as np
 from . import setup
 from scipy.integrate import complex_ode
-#from memory_profiler import profile
 
 class Qsys:
     """
@@ -62,26 +61,6 @@ class Qsys:
             self.hamiltonian = argHamiltonian
         self.conditional_probabilities = setup.conditional_probs(self.spectrum)
         self.POVMs = setup.POVMs(self.spectrum, self.conditional_probabilities)
-
-    def update_state(self, new_state):
-        """
-        Updates wavefunction by one timestep evolution
-
-        Parameters:
-        -----------
-            new_state: vector
-                the state to update to
-        """
-        self.current_state = self.normalize(new_state)
-
-    def update_probs(self):
-        """
-        Calculates probabilities from wf each timestep for rendering purposes
-        """
-        self.current_probs = self.probabilities()
-
-    def get_probs(self):
-        return self.current_probs
 
     def normalize(self, state):
         """
@@ -145,6 +124,9 @@ class Qsys:
         probs = np.absolute(self.current_state)
         norm = np.sum(probs) # Calculates the norm of the current wavefunction
         return probs / norm
+    def get_probs(self):
+        return self.current_probs
+
 
     def measure(self, key):
         """
@@ -184,6 +166,6 @@ class Qsys:
 
     def run(self):
         new_state = self.rk4_step(self.current_state, self.time, self.schrodinger, self.delta_t)
+        self.current_state = self.normalize(new_state)
         self.time += self.delta_t
-        self.update_state(new_state)
-        self.update_probs()
+        self.current_probs = self.probabilities()
