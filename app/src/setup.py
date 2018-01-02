@@ -32,13 +32,12 @@ def dist(spectrum, A, B):
     length = len(spectrum)
     forward = abs(B - A) # Forward moving graph distance between pitches
     backward = abs(forward - length) # Backward moving distance... ...
-    if forward <= backward:
-        n = forward
-    else:
+    n = forward
+    if forward < backward:
         n = backward
     return n
 
-def ordering(spectrum):
+def reorder_spectrum(spectrum):
     """
     Takes input spectrum and re-orders it so that the most probable elements occur in the middle
     """
@@ -67,7 +66,7 @@ def conditional_probs(spectrum):
             first dimension - key pressed, second dimension - internal state, third dimension - output
             ie: indexing is by (k, s, r) or (MIDI input, internal state, output)
     """
-    re_ordered_spectrum = ordering(spectrum)
+    re_ordered_spectrum = reorder_spectrum(spectrum)
     spectrum = re_ordered_spectrum[1]
     translationList = re_ordered_spectrum[0]
     n = len(spectrum)
@@ -78,8 +77,7 @@ def conditional_probs(spectrum):
             r = translationList[r]
             s = translationList[s]
             k = translationList[k]
-            if k == s:
-                if r == k:
+            if k == s and r==k:
                     conditional_probs[k, s, r] = 1
             else:
                 conditional_probs[k, s, r] = np.exp(-(dist(spectrum, r, s)) ** 2 / (0.1 * dist(spectrum, s, k)))

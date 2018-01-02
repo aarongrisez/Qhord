@@ -1,6 +1,7 @@
 from . import Qsys
 from . import OutputPitchWidget
 from . import Defaults
+from .Key import Key
 import numpy as np
 from kivy.properties import NumericProperty
 from kivy.properties import ListProperty
@@ -9,7 +10,6 @@ from kivy.properties import BooleanProperty
 from kivy.properties import StringProperty
 from kivy.core.window import Window
 from kivy.uix.widget import Widget
-from kivy.uix.button import Button
 from kivy.uix.screenmanager import Screen
 from kivy.core.audio import SoundLoader
 from kivy.lang import Builder
@@ -18,31 +18,17 @@ from kivy.logger import Logger
 import copy
 
 
-class Key(Button):
-    alpha = NumericProperty(0.0)
-    pitch_class = NumericProperty()
-    systemRef = '' #So that each key has a reference to the system (NOT a copy of the system)
-    
-    def __init__(self, inPC, inSys, x, y, text):
-        """Initializes the key
-        """
-        super(Key,self).__init__(x=x,y=y,text=text)
-        self.pitch_class = inPC
-        self.systemRef = inSys
-
-    def update_alpha(self):
-        self.alpha = float(np.power((self.systemRef.get_probs()[self.pitch_class]), 1/1.2))
-
-
 class KeyboardScreen(Screen):
     outputLabels = ListProperty()
-    keys = ListProperty()
+    pitches = ListProperty()
     winHeight = NumericProperty()
     winWidth = NumericProperty()
     outputs = ListProperty()
     presses = ListProperty()
     measured = BooleanProperty()
     buttonPositions = ListProperty()
+    lastOutput = StringProperty()
+    lastKey = StringProperty()
     main_loop = ''
     
 
@@ -53,12 +39,12 @@ class KeyboardScreen(Screen):
         self.SOUND_PATH = 'src/assets/sounds/piano/'
         self.SOUND_EXT = '.wav'
         self.pitches_from_num = Defaults.PitchesSharps().numbers
-        self.playFunction = self.playSinglePitch
         self.winHeight = Window.size[1]
         self.winWidth = Window.size[0]
         self.outputs = []
         self.presses = []
         self.measured = False
+        self.lastOutput
         
     def startSimulation(self, argSpectrum=[0], argPsi_not=[0], argFrequency=0., argRoot1=0, argRoot2=0):
         """Runs every time the simulation starts, 
@@ -71,20 +57,18 @@ class KeyboardScreen(Screen):
         self.root1 = argRoot1
         self.root2 = argRoot2
         self.holder1 = np.zeros(len(self.spectrum))
-        self.first = True
         self.holder2 = np.zeros(len(self.spectrum))
         self.outputLabels = [None for i in range(self.n)]
-        self.keyslist = [None for i in range(self.n)]
+        self.pitches = [None for i in range(self.n)]
         for i in range(self.n):
-            self.keyslist[i] = SoundLoader.load(self.SOUND_PATH + str(i) + self.SOUND_EXT)
+            self.pitches[i] = SoundLoader.load(self.SOUND_PATH + str(i) + self.SOUND_EXT)
             Logger.info('SoundLoader: Loaded ' + self.SOUND_PATH + str(i) + self.SOUND_EXT)
-        self.keys = self.keyslist
         for i in enumerate(argPsi_not): #This for loop overrides the given Psi_not and transposes the bare spectrum up to the first root
             self.holder1[(i[0] + self.root1) % self.n] = i[1] #Transpose atom to root of Chord1
             self.holder2[(i[0] + self.root2) % self.n] = i[1] #Transpose atom to root of Chord1
         self.system = Qsys.Qsys(12, self.holder1, 0.01, self.frequency,self.spectrum, self.holder1, self.holder2, self.root1, self.root2)
         self.buttonPositions = self.setButtonPositions()
-        self.keyWidgets = [Key(i, self.system, int(self.buttonPositions[0][i]), int(self.buttonPositions[1][i]), str(self.pitches_from_num[str(i)])) for i in range(self.n)]
+        self.keyWidgets = [Key(i, self.pitches, self.system, int(self.buttonPositions[0][i]), int(self.buttonPositions[1][i]), str(self.pitches_from_num[str(i)])) for i in range(self.n)]
         for i in range(self.n):
             self.ids['main_window'].add_widget(self.keyWidgets[i])
         self.main_loop = Clock.schedule_interval(self.application_loop, 1 / 30.)
@@ -96,13 +80,13 @@ class KeyboardScreen(Screen):
         """
         Clock.unschedule(self.application_loop)
         self.system = ''
-        keyWidgets = []
-        outputs = []
-        presses = []
+        self.outputs = []
+        self.presses = []
         for outputWidget in self.ids['output_window'].children:
             self.ids['output_window'].remove_widget(outputWidget)
         for keyWidget in self.keyWidgets:
             self.ids['main_window'].remove_widget(keyWidget)
+        self.keyWidgets = []
 
     def emptyFunct(self, args):
         pass
@@ -121,42 +105,29 @@ class KeyboardScreen(Screen):
         y_rel_pos = boundingFunction(x_rel_pos)
         xpos = x_rel_pos * self.winWidth
         ypos = y_rel_pos * self.winHeight
-        return [xpos, ypos] 
-
-    def solve_ode(self, *args):
-        self.system.run()
-
-    def measure_system(self, key):
-        """
-        Currently, you will hear only the outcome of the measurement
-        """
-        self.system.measure(key)
-        self.outputLabels = [self.system.lastKey, self.system.lastOutput]
-        self.playFunction() 
-        self.measured = True
-
-    def playSinglePitch(self):
-        if self.keys[self.outputLabels[1]].state == 'play':
-            self.keys[self.outputLabels[1]].stop()
-        self.keys[self.outputLabels[1]].play()
-
+        return [xpos, ypos]
+    
     def addOutputWidget(self,output,key):
         outputPitchWidget = OutputPitchWidget.OutputPitchWidget(output,key)
         self.ids['output_window'].add_widget(outputPitchWidget)
         outputPitchWidget.start()
 
     def application_loop(self, *args):
-        if self.first:
-            self.first = False
-        self.solve_ode()
+        self.system.run()
         for i in range(self.n):
-            self.keyWidgets[i].update_alpha()
+            curKey = self.keyWidgets[i]
+            curKey.update_alpha(self.system.get_probs())
+            if curKey.measured:
+                self.measured = True
+                curKey.measured = False
+                self.lastKey = str(curKey.pitch_class)
+                self.lastOutput = str(curKey.output)
         if self.measured == False:
             self.outputs.append(None)
             self.presses.append(None)
-        elif self.measured == True:
-            self.outputs.append(self.system.lastOutput)
-            self.presses.append(self.system.lastKey)
-            self.addOutputWidget(self.system.lastOutput,self.system.lastKey)
+        else:
+            self.outputs.append(self.lastOutput)
+            self.presses.append(self.lastKey)
+            self.addOutputWidget(self.lastOutput,self.lastKey)
             self.measured = False
 

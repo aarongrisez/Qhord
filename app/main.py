@@ -38,7 +38,8 @@ class SpectrumScreen(Screen):
     psi_not = np.zeros(11)
     
     def update_spectrum(self): 
-        for i in range(11): self.spectrum[i] = self.ids[str(i)].value
+        for i in range(11): 
+            self.spectrum[i] = self.ids[str(i)].value
         norm = sum(self.spectrum)
         if norm != 0:
             self.spectrum = self.spectrum / norm #Normalizes the spectrum immediately
@@ -70,7 +71,6 @@ class HamiltonianScreen(Screen):
 
     def __init__(self, **kwargs):
         super(HamiltonianScreen, self).__init__()
-        #STOPPED HERE!!!! Need to get class definitions for root1 and root2 buttons
         self.root1Buttons = [Root1ToggleButton() for i in range(self.n)]
         #for i in range(self.n):
         #    self.ids['main_window'].add_widget(self.keyWidgets[i])
@@ -85,7 +85,7 @@ class MainApp(App):
         self.colorScheme = Defaults.ColorScheme()
         self.spectra = Defaults.Spectra()
         self.winSize = (float(Window.width), float(Window.height))
-        self.winClass = Defaults.WinClass().getWinClass((float(Window.width), float(Window.height)))
+        self.winClass = Defaults.WinClass().getWinClass(self.winSize)
         Logger.info('Build: Using WindowClass ' + str(self.winClass))
         self.widgetSizes = Defaults.WidgetDefaults(self.winClass)
         self.screenManager = MainScreenManager()

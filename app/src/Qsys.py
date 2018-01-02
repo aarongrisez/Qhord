@@ -131,6 +131,8 @@ class Qsys:
     def measure(self, key):
         """
         Measures current state and initiates collapse
+        Parameters: key is the key to measure for
+        Returns the output of the measurement
         """
         #Randomly Sample to find "internal state"
         wf_probability = self.probabilities()
@@ -140,10 +142,10 @@ class Qsys:
         self.lastKey = key
         #Now, need to collapse state and output pitch
         self.collapse()
-        return self.output()
+        return self.lastOutput
 
     def collapse(self):
-        POVM = self.POVMs[self.lastOutput][self.lastKey]        
+        POVM = self.POVMs[self.lastOutput][self.lastKey]       
         new_state = np.dot(np.sqrt(POVM), self.current_state) / np.dot(self.current_state, np.dot(POVM, self.current_state))
         self.current_state = new_state
 
@@ -157,12 +159,6 @@ class Qsys:
         thresholds = list(thresholds)
         loc = thresholds.index(max_threshold)
         return loc
-
-    def output(self):
-        """
-        Triggers output for the given output pitch
-        """
-        return (self.lastKey, self.lastOutput)
 
     def run(self):
         new_state = self.rk4_step(self.current_state, self.time, self.schrodinger, self.delta_t)
