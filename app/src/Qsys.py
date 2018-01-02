@@ -51,8 +51,6 @@ class Qsys:
         self.omega = argOmega
         self.root1 = argRoot1
         self.root2 = argRoot2
-        self.lastOutput = 0
-        self.lastKey = 0
         self.conditionalProbs = setup.conditional_probs(self.recombinedSpectrum)
         self.POVMs = setup.POVMs(self.spectrum, self.conditionalProbs)
         if argHamiltonian == None:
@@ -138,14 +136,13 @@ class Qsys:
         wf_probability = self.probabilities()
         internal_state = self.sample(wf_probability) #This is a hidden state--The User never sees or knows this
         conditional_probability = self.conditional_probabilities[key, internal_state, :]
-        self.lastOutput = self.sample(conditional_probability)
-        self.lastKey = key
+        output = self.sample(conditional_probability)
         #Now, need to collapse state and output pitch
-        self.collapse()
-        return self.lastOutput
+        self.collapse(output,key)
+        return output
 
-    def collapse(self):
-        POVM = self.POVMs[self.lastOutput][self.lastKey]       
+    def collapse(self,output,key):
+        POVM = self.POVMs[output][key]       
         new_state = np.dot(np.sqrt(POVM), self.current_state) / np.dot(self.current_state, np.dot(POVM, self.current_state))
         self.current_state = new_state
 

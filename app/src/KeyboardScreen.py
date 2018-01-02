@@ -27,8 +27,6 @@ class KeyboardScreen(Screen):
     presses = ListProperty()
     measured = BooleanProperty()
     buttonPositions = ListProperty()
-    lastOutput = StringProperty()
-    lastKey = StringProperty()
     main_loop = ''
     
 
@@ -44,7 +42,6 @@ class KeyboardScreen(Screen):
         self.outputs = []
         self.presses = []
         self.measured = False
-        self.lastOutput
         
     def startSimulation(self, argSpectrum=[0], argPsi_not=[0], argFrequency=0., argRoot1=0, argRoot2=0):
         """Runs every time the simulation starts, 
@@ -120,14 +117,14 @@ class KeyboardScreen(Screen):
             if curKey.measured:
                 self.measured = True
                 curKey.measured = False
-                self.lastKey = str(curKey.pitch_class)
-                self.lastOutput = str(curKey.output)
+                lastKey = str(curKey.pitch_class)
+                lastOutput = str(curKey.output)
         if self.measured == False:
             self.outputs.append(None)
             self.presses.append(None)
         else:
-            self.outputs.append(self.lastOutput)
-            self.presses.append(self.lastKey)
-            self.addOutputWidget(self.lastOutput,self.lastKey)
+            self.outputs.append(lastOutput)
+            self.presses.append(lastKey)
+            self.addOutputWidget(lastOutput,lastKey)
             self.measured = False
 
