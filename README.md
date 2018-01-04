@@ -3,7 +3,7 @@
 
 Qhord is a mobile application for interacting with a quantum mechanical system through a musical interface.
 
-![logo](qhord/app/src/assets/images/QhordLogo.png?raw=true)
+![logo](app/src/assets/images/QhordLogo.png?raw=true)
 
 Website: [qhord](http://qhord.com/)
 
