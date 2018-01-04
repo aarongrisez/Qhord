@@ -1,9 +1,9 @@
 # qhord 
 [![Build Status](https://travis-ci.com/aarongrisez/qhord.svg?token=NKnMzaV57yuvZyF9zLxy&branch=master)](https://travis-ci.com/aarongrisez/qhord)
-A toy for playing quantum music.
-This repository currently only contains the first prototype release of the Qhord project.
 
-![logo](https://www.qhord.com/wp-content/uploads/2017/10/cropped-Qhord-Logo-color-2.png)
+Qhord is a mobile application for interacting with a quantum mechanical system through a musical interface.
+
+![logo](qhord/app/src/assets/images/QhordLogo.png)
 
 Website: [qhord](http://qhord.com/)
 
