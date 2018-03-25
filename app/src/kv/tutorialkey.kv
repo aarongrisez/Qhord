@@ -1,4 +1,4 @@
-<Key>:
+<TutorialKey>:
 #Key widget inherits from Button, every pitch is represented by a key. Every key should be the child of Keyboard
     canvas.before:
         Color:
@@ -13,8 +13,9 @@
             size: self.size
             pos: self.pos
     pitch_class: 0
-    on_press: app.screenManager.ids['keyboardScreen'].measure_system(self.pitch_class)
     alpha: 0.
     background_color: 0, 0, 0, 0
     size_hint: None, None
     size: app.widgetSizes.KEY_WIDTH, app.widgetSizes.KEY_HEIGHT
+
+

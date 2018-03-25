@@ -14,9 +14,9 @@ class ColorScheme():
     """
     Setup color scheme for the application
     """
-    Background = 0.05, 0.39, 0.48, 1
+    Background = 0.03, 0.63, 1.0, 1
     ButtonFill = 1, 1, 1 
-    ButtonEdge = 0.031, 0.329, 0.412, 1
+    ButtonEdge = 0.98, 0.65, 0.13, 1
     name = "default"
 
 class WidgetDefaults(object):
@@ -35,6 +35,16 @@ class WidgetDefaults(object):
 
 class Spectra():
     defaults = {
+    ############
+    #PENTATONIC#
+    ############
+    #These options are only available for n = 4
+    '1-5': [.5,0,0,0,.5],
+    '1-3': [.5,0,0,0,0],
+    ###########
+    #CHROMATIC#
+    ###########
+    #These options are only available for n = 11
     'Major': [.45, 0, 0, 0, .35, 0, 0, .2, 0, 0, 0, 0],
     'Minor':  [.45, 0, 0, .35, 0, 0, 0, .2, 0, 0, 0, 0],
     'Augmented': [.45, 0, 0, 0, .35, 0, 0, 0, .2, 0, 0, 0], 
@@ -43,6 +53,9 @@ class Spectra():
     }
 
 class PitchesSharps():
+    pitchClasses = {'C_pentatonic': [0,2,4,5,7]}
+    letters5 = {'C': 0, 'D': 1, 'E': 2, 'F': 3, 'G': 4}
+    numbers5 = {'0': 'C', '1': 'D', '2': 'E', '3': 'F', '4': 'G'}
     letters = {'C': 0, 'C#': 1, 'D': 2, 'D#': 3, 'E': 4, 'F': 5, 'F#': 6, 'G': 7, 'G#': 8, 'A': 9, 'A#': 10, 'B': 11}
     numbers = {'0': 'C', '1': 'C#', '2': 'D', '3': 'D#', '4': 'E', '5': 'F', '6': 'F#', '7': 'G', '8': 'G#', '9': 'A', '10': 'A#', '11': 'B'}
  

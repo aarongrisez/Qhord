@@ -15,9 +15,9 @@ class OutputPitchWidget(Widget):
     labelColor = ListProperty([1,1,1,0])
     
     def __init__(self,argOutput,argKey):
-		super(OutputPitchWidget,self).__init__()
-		self.output = str(argOutput)
-		self.key = str(argKey)
+        super(OutputPitchWidget,self).__init__()
+        self.output = str(argOutput)
+        self.key = str(argKey)
 
     def start(self):
         self.animation = Animation(labelColor=[1,1,1,1], duration=.5) 
@@ -26,5 +26,5 @@ class OutputPitchWidget(Widget):
         self.animation.start(self)
         
     def stop(self, arg1, arg2):
-		if(self.parent is not None):
-			self.parent.remove_widget(self)
+        if(self.parent is not None):
+            self.parent.remove_widget(self)

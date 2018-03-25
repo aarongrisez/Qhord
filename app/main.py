@@ -1,4 +1,6 @@
 from kivy.app import App
+from kivy.base import ExceptionHandler
+from kivy.base import ExceptionManager
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.togglebutton import ToggleButton
@@ -6,20 +8,32 @@ from kivy.core.window import Window
 from kivy.properties import ListProperty
 from kivy.properties import NumericProperty
 from kivy.properties import StringProperty
-from src import KeyboardScreen
+from src.screens import KeyboardScreen
+from src.screens import TutorialScreen
+#from src.screens import EmailScreen
 from src import Defaults
 from kivy.clock import Clock
-from settingsjson import settings_json
 from kivy.lang import Builder
 from kivy.logger import Logger
+import kivy.resources
 import numpy as np
+#import plyer
 
 #Builder.load_file('SpectrumScreen.kv')
 Builder.load_file('src/kv/HamiltonianScreen.kv')
+Logger.info("Import Hamiltonian Screen")
+Builder.load_file('src/kv/TutorialScreen.kv')
+Logger.info("Import Tutorial Screen")
 Builder.load_file('src/kv/WelcomeScreen.kv')
+Logger.info("Import Welcome Screen")
 Builder.load_file('src/kv/KeyboardScreen.kv')
+Logger.info("Import Keyboard Screen")
 Builder.load_file('src/kv/key.kv')
-Builder.load_file('src/kv/CustomizeHamiltonianScreen.kv')
+Logger.info("Import Key")
+Builder.load_file('src/kv/tutorialkey.kv')
+Logger.info("Import TutorialKey")
+#Builder.load_file('src/kv/EmailScreen.kv')
+#Logger.info("Import Email Screen")
 
 class MainScreenManager(ScreenManager): 
     pass 
@@ -29,28 +43,6 @@ class WelcomeScreen(Screen):
 
 class CreditsScreen(Screen):
     pass
-
-class CustomizeHamiltonianScreen(Screen):
-    pass
-
-class SpectrumScreen(Screen): 
-    spectrum = np.zeros(11) 
-    psi_not = np.zeros(11)
-    
-    def update_spectrum(self): 
-        for i in range(11): self.spectrum[i] = self.ids[str(i)].value
-        norm = sum(self.spectrum)
-        if norm != 0:
-            self.spectrum = self.spectrum / norm #Normalizes the spectrum immediately
-        self.ids['spectrumLabel'].text = str(np.around(self.spectrum, decimals=2))
-
-    def update_psi_not(self):
-        for i in range(11):
-           self.psi_not[i] = self.ids[str(i + 12)].value
-        norm = sum(self.psi_not)
-        if norm != 0:
-            self.psi_not = self.psi_not / norm #Normalizes the initial condition immediately
-        self.ids['psi_notLabel'].text = str(np.around(self.psi_not, decimals=2))
 
 class ChordToggleButton(ToggleButton):
     pass
@@ -62,7 +54,7 @@ class Root2ToggleButton(ToggleButton):
     pass
 
 class HamiltonianScreen(Screen):
-    chord = StringProperty('Major')
+    chord = StringProperty('1-5')
     frequency = NumericProperty(10.0)
     root1 = NumericProperty(0)
     root2 = NumericProperty(7)
@@ -82,31 +74,38 @@ class MainApp(App):
     	pass
 
     def build(self):
+#        try:
         self.colorScheme = Defaults.ColorScheme()
         self.spectra = Defaults.Spectra()
         self.winSize = (float(Window.width), float(Window.height))
         self.winClass = Defaults.WinClass().getWinClass((float(Window.width), float(Window.height)))
         Logger.info('Build: Using WindowClass ' + str(self.winClass))
         self.widgetSizes = Defaults.WidgetDefaults(self.winClass)
+        Logger.info('Widget Defaults Loaded')
         self.screenManager = MainScreenManager()
+        Logger.info("Screen Manager Initialized")
         self.mainLoop = Clock.schedule_once(self.initializeEmptyApp)
         self.pitches = Defaults.PitchesSharps()
         Logger.info('Build: App build successful: ')
         return self.screenManager
+#        except:
+#            Logger.info('Something big messed up')
 
     def on_pause(self):
         self.get_running_app.stop()
         self.tracker.stats.print_summary()
         Logger.info('Runtime: Pausing application')
 
-    def app_start(self):
-        self.screenManager.ids['keyboardScreen'].children[0].schedule()
-        Logger.info('OOGABOOGAOOGABOOGA WHY DO I NEVER RUN???')
-
     def app_stop(self):
         if self.screenManager.current != 'keyboardScreen':
             self.mainLoop.cancel()        
         Logger.info('Runtime: Stopping application')
 
+class E(ExceptionHandler):
+    def handle_exception(self, inst):
+        Logger.exception('Exception catched by ExceptionHandler')
+        return ExceptionManager.PASS
+
 if __name__=="__main__":
+#    ExceptionManager.add_handler(E())
     MainApp().run()

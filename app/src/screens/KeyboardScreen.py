@@ -1,6 +1,6 @@
-from . import Qsys
-from . import OutputPitchWidget
-from . import Defaults
+from .. import Qsys
+from ..components import OutputPitchWidget
+from .. import Defaults
 import numpy as np
 from kivy.properties import NumericProperty
 from kivy.properties import ListProperty
@@ -10,6 +10,7 @@ from kivy.properties import StringProperty
 from kivy.core.window import Window
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
+from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen
 from kivy.core.audio import SoundLoader
 from kivy.lang import Builder
@@ -17,6 +18,17 @@ from kivy.clock import Clock
 from kivy.logger import Logger
 import copy
 
+class Walkthrough1(Popup):
+    pass
+
+class Walkthrough2(Popup):
+    pass
+
+class Walkthrough3(Popup):
+    pass
+
+class Walkthrough4(Popup):
+    pass
 
 class Key(Button):
     alpha = NumericProperty(0.0)
@@ -52,7 +64,10 @@ class KeyboardScreen(Screen):
         super(KeyboardScreen, self).__init__()
         self.SOUND_PATH = 'src/assets/sounds/piano/'
         self.SOUND_EXT = '.wav'
-        self.pitches_from_num = Defaults.PitchesSharps().numbers
+        #self.pitches_from_num = Defaults.PitchesSharps().numbers
+        ##CHANGED to pentatonic mode
+        self.pitches_from_num = Defaults.PitchesSharps().numbers5
+        self.pitchClasses = Defaults.PitchesSharps().pitchClasses['C_pentatonic']
         self.playFunction = self.playSinglePitch
         self.winHeight = Window.size[1]
         self.winWidth = Window.size[0]
@@ -76,13 +91,13 @@ class KeyboardScreen(Screen):
         self.outputLabels = [None for i in range(self.n)]
         self.keyslist = [None for i in range(self.n)]
         for i in range(self.n):
-            self.keyslist[i] = SoundLoader.load(self.SOUND_PATH + str(i) + self.SOUND_EXT)
-            Logger.info('SoundLoader: Loaded ' + self.SOUND_PATH + str(i) + self.SOUND_EXT)
+            self.keyslist[i] = SoundLoader.load(self.SOUND_PATH + str(self.pitches_from_num[str(i)]) + self.SOUND_EXT)
+            Logger.info('SoundLoader: Loaded ' + self.SOUND_PATH + str(self.pitches_from_num[str(i)]) + self.SOUND_EXT)
         self.keys = self.keyslist
         for i in enumerate(argPsi_not): #This for loop overrides the given Psi_not and transposes the bare spectrum up to the first root
             self.holder1[(i[0] + self.root1) % self.n] = i[1] #Transpose atom to root of Chord1
             self.holder2[(i[0] + self.root2) % self.n] = i[1] #Transpose atom to root of Chord1
-        self.system = Qsys.Qsys(12, self.holder1, 0.01, self.frequency,self.spectrum, self.holder1, self.holder2, self.root1, self.root2)
+        self.system = Qsys.Qsys(self.n, self.holder1, 0.01, self.frequency,self.spectrum, self.holder1, self.holder2, self.root1, self.root2)
         self.buttonPositions = self.setButtonPositions()
         self.keyWidgets = [Key(i, self.system, int(self.buttonPositions[0][i]), int(self.buttonPositions[1][i]), str(self.pitches_from_num[str(i)])) for i in range(self.n)]
         for i in range(self.n):
@@ -103,6 +118,10 @@ class KeyboardScreen(Screen):
             self.ids['output_window'].remove_widget(outputWidget)
         for keyWidget in self.keyWidgets:
             self.ids['main_window'].remove_widget(keyWidget)
+        for i in range(self.n):
+            self.keyslist[i].unload() 
+            Logger.info('SoundLoader: Unloaded ' + self.SOUND_PATH + str(i) + self.SOUND_EXT)
+ 
 
     def emptyFunct(self, args):
         pass
@@ -141,7 +160,7 @@ class KeyboardScreen(Screen):
         self.keys[self.outputLabels[1]].play()
 
     def addOutputWidget(self,output,key):
-        outputPitchWidget = OutputPitchWidget.OutputPitchWidget(output,key)
+        outputPitchWidget = OutputPitchWidget.OutputPitchWidget(self.pitchClasses[output],self.pitchClasses[key])
         self.ids['output_window'].add_widget(outputPitchWidget)
         outputPitchWidget.start()
 

@@ -1,8 +1,11 @@
 #:import FadeTransition kivy.uix.screenmanager.FadeTransition
-#:import KeyboardScreen src.KeyboardScreen
+#:import KeyboardScreen src.screens.KeyboardScreen
+#:import TutorialScreen src.screens.TutorialScreen
+#:import resources kivy.resources
 
 <Label>:
-    color: .925,.969,.98,1
+    color: 1,1,1.0,1
+    font: resources.resource_find('src/assets/font/VarelaRound.ttf')
 
 <CreditsLabel@Label>:
     pos_hint: {'center_x': 0.5}
@@ -34,22 +37,19 @@
 <MainScreenManager>:
     id: screenManager
     transition: FadeTransition()
-    on_current: app.app_stop()
+    on_current: app.on_stop()
     WelcomeScreen:
         id: welcomeScreen
         name: 'welcomeScreen'
-#    SpectrumScreen:
-#        id: spectrumScreen
-#        name: 'spectrumScreen'
     HamiltonianScreen:
         id: hamiltonianScreen
         name: 'hamiltonianScreen'
     KeyboardScreen:
         id: keyboardScreen
         name: 'keyboardScreen'
-    CustomizeHamiltonianScreen:
-        id: customizeHamiltonianScreen
-        name: 'customizeHamiltonianScreen'
+    TutorialScreen:
+        id: tutorialScreen
+        name: 'tutorialScreen'
     CreditsScreen:
         id: creditsScreen
         name: 'creditsScreen'

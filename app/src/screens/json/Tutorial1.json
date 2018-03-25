@@ -1,0 +1,32 @@
+{ "tutorial1":
+    {"steps":  [
+        {   "step": 1,
+            "completed": false,
+            "text": "Hey look! The 3rd button on this quantum piano lit up. Try pressing it.", 
+            "alpha": [0,0,1,0,0],
+            "trigger": 2,
+            "heard": 2
+        },
+        {   "step": 2, 
+            "completed": false,
+            "text": "Cool, you heard the note you pressed, just like a normal piano. Try again, this time with the second button.", 
+            "alpha": [0,1,0,0,0],
+            "trigger": 1,
+            "heard": 1
+        },
+        {   "step": 3, 
+            "completed": false,
+            "text": "Woah, this is different. Now 2 of the buttons are lit up just a bit. What happens if you press the 4th button: F?",
+            "alpha": [0,0,0,0.5,0.5],
+            "trigger": 3,
+            "heard": 4
+        },
+        {   "step": 4, 
+            "completed": false,
+            "text": "That's strange. You heard a G this time... Well, it looks the same as before. What if you press F again?",
+            "alpha": [0,0,0,0.5,0.5],
+            "trigger": 3,
+            "heard": 3
+        }
+    ]}
+} 

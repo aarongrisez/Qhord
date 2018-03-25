@@ -1,5 +1,3 @@
-#!usr/bin/env python3
-
 import numpy as np
 import itertools as it
 from operator import itemgetter
@@ -118,24 +116,24 @@ def tune_H(root_1, root_2, atom, freq):
     H = freq / 2 * (np.outer(chord1, chord2) + np.outer(chord2, chord1))
     return H
 
-def atom(spectrum, argThreshold = 0.8):
+#def atom(spectrum, argThreshold = 0.8):
     """
     Extract an abstracted atomic structure chord from the given spectrum. This is just one of several possible extractions that could be musically sensible. This function can be broken if given input like this: np.array([.15,.5,.15,.2]) with threshold .8. Here the algorithm will correctly select the 1st and 3rd elements (zero indexed). Then it will admit the 0th element and terminate. However, this is somewhat erroneous as the 2nd element has the same value as the 0th. The atomic structure the algorithm gives, however, implies that somehow the 0th element is more important. What I propose to fix this is an adaptive approach to setting the threshold. That is, include some way for the algorithm to detect if it stops on an element with multiplicity != 1, and then adjust the given threshold either up or down (whichever is appropriate) to extract the atomic structure.
     """
-    spectrum = np.array(spectrum) #Sanitize input so that it is a numpy array
-    threshold = argThreshold #Set cutoff threshold for total weight to include from the spectrum
-    total_weight = 0
-    if np.sum(spectrum) != 1.0: #Check to see that spectrum is normalized, normalize if not
-        spectrum = spectrum / np.sum(spectrum)
-    for i in range(1, spectrum.size):
-        if total_weight < threshold: #Check that the total weight of selected indeces is less than the threshold
-            ind = np.argpartition(spectrum, -i)[-i:] #Select the indeces of i largest values in spectrum
-            total_weight = np.sum(spectrum[ind]) #Find the sum of all elements in spectrum that were selected
-        else:
-            break
-    atom = np.zeros(spectrum.size)
-    atom[ind] += spectrum[ind]
-    return atom / np.sum(atom)
+#    spectrum = np.array(spectrum) #Sanitize input so that it is a numpy array
+#    threshold = argThreshold #Set cutoff threshold for total weight to include from the spectrum
+#    total_weight = 0
+#    if np.sum(spectrum) != 1.0: #Check to see that spectrum is normalized, normalize if not
+#        spectrum = spectrum / np.sum(spectrum)
+#    for i in range(1, spectrum.size):
+#        if total_weight < threshold: #Check that the total weight of selected indeces is less than the threshold
+#            ind = np.argpartition(spectrum, -i)[-i:] #Select the indeces of i largest values in spectrum
+#            total_weight = np.sum(spectrum[ind]) #Find the sum of all elements in spectrum that were selected
+#        else:
+#            break
+#    atom = np.zeros(spectrum.size)
+#    atom[ind] += spectrum[ind]
+#    return atom / np.sum(atom)
 
 def POVM_key(spectrum, r, key, conditional_probs):
     """

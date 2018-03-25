@@ -1,0 +1,31 @@
+lInterface>:
+    orientation: 'vertical'
+    BoxLayout:
+        Label:
+            text: 'Recipient:'
+        TextInput:
+            id: recipient
+    BoxLayout:
+        Label:
+            text: 'Subject:'
+        TextInput:
+            id: subject
+    BoxLayout:
+        Label:
+            text: 'text'
+        TextInput:
+            id: text
+    BoxLayout:
+        Label:
+            text: 'create chooser?'
+        CheckBox:
+            id: create_chooser
+    IntentButton:
+        email_recipient: recipient.text
+        email_subject: subject.text
+        email_text: text.text
+        create_chooser: create_chooser.active
+        text: 'Send email'
+        size_hint_y: None
+        height: sp(40)
+        on_release: self.send_email()

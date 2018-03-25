@@ -1,0 +1,59 @@
+#:import gc gc
+#:import resources kivy.resources
+#:import Factory kivy.factory.Factory
+
+<TutorialScreen>:
+#Main widget on Keyboard Screen. Default layout for a 12 pitch system
+    on_enter: self.on_enter()
+    canvas.before:
+        Color:
+            rgba: app.colorScheme.Background
+        Rectangle:
+            size: self.size
+    accidental_display: 'sharps'
+   
+    RelativeLayout:
+        RelativeLayout:
+            pos: 0, app.winSize[1] * .8
+            size_hint: None, None
+            size: app.winSize[0], app.winSize[1] * .2
+            BoxLayout:
+                FloatLayout:
+                    size_hint: .3, 1
+                    canvas.before:
+                        Color:
+                            rgba: app.colorScheme.Background
+                        Rectangle
+                            size: self.size
+                            pos: self.pos
+                    BoxLayout:
+                        orientation: 'vertical'
+                        Label:
+                            text: "Pressed"
+                        Label
+                            text: "Heard"
+                FloatLayout:
+                    size_hint: .7, 1
+                    canvas.after:
+                        Color:
+                            rgba: 1,0,0,0
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+                    id: output_window
+        RelativeLayout:
+            id: main_window
+            size_hint: None, None
+            size: app.winSize[0], app.winSize[1] * .8
+            colorScheme: app.colorScheme
+            outputLabels: ["None yet", "None yet"]
+            Image:
+                pos: app.winSize[0] * .03, app.winSize[1] * .001
+                size_hint: .2, .2
+                source: resources.resource_find('src/assets/images/cat.png')
+            Button:
+                pos: app.winSize[0] * .3, app.winSize[1] * .05
+                size_hint: None, None
+                size: app.winSize[0] * .2 , app.winSize[1] * .1
+                text: "Exit"
+                on_release: app.screenManager.current = 'welcomeScreen'

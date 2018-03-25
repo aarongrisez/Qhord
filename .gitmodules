@@ -1,0 +1,3 @@
+[submodule "design/kivy-designer"]
+	path = design/kivy-designer
+	url = https://github.com/kivy/kivy-designer

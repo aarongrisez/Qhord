@@ -13,14 +13,20 @@
             pos_hint: {'center_x': .5, 'center_y': .7}
         Button:
             size_hint: None, None
-            size: .4 * app.winSize[0], .15 * app.winSize[1]
-            pos_hint: {'center_x': .5, 'center_y': .4}
-            text: 'Enter App'
+            size: .3 * app.winSize[0], .1 * app.winSize[1]
+            pos_hint: {'center_x': .5, 'center_y': .43}
+            text: 'Play'
 #            on_press: app.root.current = 'spectrumScreen'
             on_press: app.root.current = 'hamiltonianScreen'
         Button:
             size_hint: None, None
-            size: .4 * app.winSize[0], .15 * app.winSize[1]
-            pos_hint: {'center_x': .5, 'center_y': .2}
+            size: .3 * app.winSize[0], .1 * app.winSize[1]
+            pos_hint: {'center_x': .5, 'center_y': .32}
+            text: 'Tutorial'
+            on_release: app.root.current = 'tutorialScreen' 
+        Button:
+            size_hint: None, None
+            size: .3 * app.winSize[0], .1 * app.winSize[1]
+            pos_hint: {'center_x': .5, 'center_y': .21}
             text: "Credits"
             on_release: app.root.current = 'creditsScreen' 

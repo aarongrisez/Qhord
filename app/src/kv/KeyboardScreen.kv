@@ -1,3 +1,92 @@
+#:import gc gc
+#:import resources kivy.resources
+#:import Factory kivy.factory.Factory
+
+<WalkthroughLabel@Label>
+    size_hint_y: None
+    text_size: self.width, None
+    height: self.texture_size[1]
+
+<Walkthrough1@Popup>
+    title: "Walkthrough"
+    auto_dismiss: False
+    size_hint: .4, .4
+    BoxLayout:
+        orientation: 'vertical'
+        ScrollView:
+            WalkthroughLabel:
+                text: "This is the Quantum Piano! Notice how each of the buttons on the screen has a letter on it? Those are like the keys on a regular piano."
+        BoxLayout:
+            Button:
+                text: "Close"
+                on_release: root.dismiss()
+            Button:
+                text: "Next"
+                on_press: Factory.Walkthrough2().open()
+                on_release: root.dismiss()
+
+<Walkthrough2@Popup>
+    title: "Walthrough 2"
+    size_hint: .4, .4
+    auto_dismiss: False
+    BoxLayout:
+        orientation: 'vertical'
+        ScrollView:
+            WalkthroughLabel:
+                text: "What makes this piano different, though, is that it obeys the laws of Quantum Mechanics. That means, you can't expect it to sound the same as a normal piano."
+        BoxLayout:
+            Button:
+                text: "Close"
+                on_release: root.dismiss()
+            Button: 
+                text: "Back"
+                on_press: Factory.Walkthrough1().open()
+                on_release: root.dismiss()
+            Button: 
+                text: "Next"
+                on_press: Factory.Walkthrough3().open()
+                on_release: root.dismiss()
+
+<Walkthrough3@Popup>
+    title: "Walthrough 3"
+    size_hint: .4, .4
+    auto_dismiss: False
+    BoxLayout:
+        orientation: 'vertical'
+        ScrollView:
+            WalkthroughLabel:
+                text: "Instead of telling you those rules, though, we want you to try and figure out some of them for yourself! How? By playing Quantum Music, of course!"
+        BoxLayout:
+            Button:
+                text: "Close"
+                on_release: root.dismiss()
+            Button: 
+                text: "Back"
+                on_press: Factory.Walkthrough2().open()
+                on_release: root.dismiss()
+            Button: 
+                text: "Next"
+                on_press: Factory.Walkthrough4().open()
+                on_release: root.dismiss()
+
+<Walkthrough4@Popup>
+    title: "Walthrough 4"
+    size_hint: .4, .4
+    auto_dismiss: False
+    BoxLayout:
+        orientation: 'vertical'
+        ScrollView:
+            WalkthroughLabel:
+                text: "I'll give you a couple of hints to start off, though. If you want to learn more, you can go through the lesson (you can get there from the home screen)."
+        BoxLayout:
+            Button:
+                text: "Close"
+                on_release: root.dismiss()
+            Button: 
+                text: "Back"
+                on_press: Factory.Walkthrough3().open()
+                on_release: root.dismiss()
+
 <KeyboardScreen>:
 #Main widget on Keyboard Screen. Default layout for a 12 pitch system
     canvas.before:
@@ -15,6 +104,7 @@
         self.startSimulation(inSpectrum, inSpectrum, inFrequency, inRoot1, inRoot2)
     on_leave:
         self.stopSimulation()
+        gc.collect()
     
     RelativeLayout:
         RelativeLayout:
@@ -51,17 +141,26 @@
             size: app.winSize[0], app.winSize[1] * .8
             colorScheme: app.colorScheme
             outputLabels: ["None yet", "None yet"]
+            Image:
+                pos: app.winSize[0] * .03, app.winSize[1] * .001
+                size_hint: .2, .2
+                source: resources.resource_find('src/assets/images/cat.png')
             Button:
-                pos: app.winSize[0] * .05, app.winSize[1] * .05
+                pos: app.winSize[0] * .3, app.winSize[1] * .05
                 size_hint: None, None
                 size: app.winSize[0] * .2 , app.winSize[1] * .1
                 text: "Change Chords"
                 on_press: root.on_stop()
                 on_release: app.screenManager.current = 'hamiltonianScreen'
             Button:
+                pos: app.winSize[0] * .6, app.winSize[1] * .05
+                size_hint: None, None
+                size: app.winSize[0] * .15, app.winSize[1] * .1
+                text: "Walkthrough"
+                on_release: Factory.Walkthrough1().open()
+            Button:
                 pos: app.winSize[0] * .8, app.winSize[1] * .05
                 size_hint: None, None
                 size: app.winSize[0] * .15, app.winSize[1] * .1
-                text: "Credits"
-                on_press: root.on_stop()
-                on_release: app.screenManager.current = 'creditsScreen'
+                text: "Exit"
+                on_release: app.screenManager.current = 'welcomeScreen' 

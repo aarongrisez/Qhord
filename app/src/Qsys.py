@@ -2,7 +2,6 @@
 
 import numpy as np
 from . import setup
-from scipy.integrate import complex_ode
 
 class Qsys:
     """
@@ -124,9 +123,9 @@ class Qsys:
         probs = np.absolute(self.current_state)
         norm = np.sum(probs) # Calculates the norm of the current wavefunction
         return probs / norm
+
     def get_probs(self):
         return self.current_probs
-
 
     def measure(self, key):
         """
