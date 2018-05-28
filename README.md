@@ -1,5 +1,5 @@
 # qhord 
-[![Build Status](https://travis-ci.com/aarongrisez/qhord.svg?token=NKnMzaV57yuvZyF9zLxy&branch=master)](https://travis-ci.com/aarongrisez/qhord)
+[![Build Status: Still need Test Suite!](https://travis-ci.com/aarongrisez/qhord.svg?token=NKnMzaV57yuvZyF9zLxy&branch=master)](https://travis-ci.com/aarongrisez/qhord)
 
 Qhord is a mobile application for interacting with a quantum mechanical system through a musical interface.
 
@@ -21,7 +21,6 @@ To run this code on your machine you will need:
 ```
 pip install 'cython>=0.23,<0.26'
 ```
-
 * [NumPY](http://www.numpy.org/)
 * [SciPY](https://www.scipy.org/)
 ```
@@ -43,7 +42,6 @@ Once your dependencies are installed and clean, you can run the app with
 python -m main
 ```
 from the /qhord/app folder
-End with an example of getting some data out of the system or using it for a little demo
 
 ### Files
 * App - Source Code
@@ -56,13 +54,12 @@ End with an example of getting some data out of the system or using it for a lit
 
 ## Contributing
 
-Please reach out to us at [http://qhord.com/](http://qhord.com/) for info about contributing.
+Please reach out to us at [http://qhord.com/](http://qhord.com/) or email Aaron at aaron@qhord.com for info about contributing.
 
 ## Authors
 
 * **Aaron Grisez** - *Initial work* - [Aaron Grisez](https://github.com/aarongrisez)
 * **Michael Seaman** - *Just the README* [Michael Seaman](https://github.com/michaelseaman)
-
 * **Sam Kagan** - *Fixing a lot of things* [Sam Kagan](https://github.com/HungryJoe)
 
 ## License
