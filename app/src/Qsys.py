@@ -3,63 +3,53 @@
 import numpy as np
 from . import setup
 
-class Qsys:
+class Qsys(object):
     """
     Base Class for Quantum System simulation
 
     Constructor Parameters:
     -----------------------
     dim (int)
-    psi_naught (list)
-    delta_t (float)
-    omega (float)
+    initial_state (list)
+    time_step (float)
 
     Attributes:
     -----------
         dim: integer
             dimension of the system
-        current_state: list_like
+        current_state: list_like, (n,n)
             current wavefunction for the system
+        current_probs: array_like, (1,n)
+            current probabilities for the system
         time: float
             current time for system's evolution
-        spectrum: list_like ###STILL NEED TO REIMPLEMENT###
-            relative weights for pitches
-        chord1: list_like
-            first chord in oscillation
-        chord2: list_like
-            second chord in oscillation
-        omega: float
-            frequency for oscillation
-        hamiltonian: array_like
-            matrix representation of hamiltonian operator; optional kwarg to override spectrum generation of hamiltonian
+        time_step: float
+            time step used in propogation of system
+
+    ATTRIBUTES SET BY SUBCLASS:
+        hamiltonian: ufunc(self.time), returns (n,n) array
+            function that returns matrix representation of hamiltonian operator
+        trajectory: array_like, (n, self.time)
+            history of the quantum system, has default max_size, dumps to npy
+            file when max size is reached
+        measurement_history: array_like, (measurement, outcome, self.time)
+            contains tuples of what measurements occurred when and their
+            outcomes
+
+    Methods:
+    --------
+        normalize(self)
+        schrodinger(self), returns array
     """
-    def __init__(self, argDim, argPsi_naught, argDelta_t, argOmega, argBareSpectrum, argStableSpectrum, argUnstableSpectrum, argRoot1, argRoot2, argHamiltonian = None):
-        self.bareSpectrum = argBareSpectrum
-        self.dim = argDim
-        self.current_state = argPsi_naught
+    def __init__(self, dim, initial_state, time_step, hamiltonian=None,
+                 povms=None):
+        self.dim = dim
+        self.current_state = initial_state
         self.current_probs = self.probabilities()
         self.time = 0.
-        self.delta_t = argDelta_t
-        self.spectrum = np.array(argStableSpectrum)
-        self.unstable = np.array(argUnstableSpectrum)
-        #Normalize spectrum if it isn't normalized
-        self.spectrum = self.spectrum / np.sum(self.spectrum)
-#        self.atom = setup.atom(self.spectrum)
-        self.recombinedSpectrum = self.spectrum + self.unstable
-        self.recombinedSpectrum = self.recombinedSpectrum / np.sum(self.recombinedSpectrum)
-        self.omega = argOmega
-        self.root1 = argRoot1
-        self.root2 = argRoot2
-        self.lastOutput = 0
-        self.lastKey = 0
-        self.conditionalProbs = setup.conditional_probs(self.recombinedSpectrum)
-        self.POVMs = setup.POVMs(self.spectrum, self.conditionalProbs)
-        if argHamiltonian == None:
-            self.hamiltonian = setup.tune_H(self.root1, self.root2, self.bareSpectrum, self.omega)
-        else:
-            self.hamiltonian = argHamiltonian
-        self.conditional_probabilities = setup.conditional_probs(self.spectrum)
-        self.POVMs = setup.POVMs(self.spectrum, self.conditional_probabilities)
+        self.time_step = time_step
+        self.hamiltonian = hamiltonian
+        self.povms = povms
 
     def normalize(self, state):
         """
@@ -70,10 +60,10 @@ class Qsys:
             state: complex vector
                 state to normalize
         """
-        norm = np.linalg.norm(state)
-        return state / norm
+        norm = np.linalg.norm(self.current_state)
+        self.current_state = self.current_state / norm
 
-    def schrodinger(self, psi, t):
+    def schrodinger(self)
         """
         Schrodinger Equation
 
@@ -89,9 +79,9 @@ class Qsys:
             vector
                 differential time step for wavefunction evolution
         """
-        return 1 / (1j) * np.dot(self.hamiltonian, psi)
+        return 1 / (1j) * np.dot(self.hamiltonian(t), self.current_state)
 
-    def rk4_step(self, u, t, du, delta_t):
+    def rk4_step(self):
         """
         Implementation of the Runge-Kutta 4th order approximation for solving a system of coupled ODEs
 
@@ -121,11 +111,7 @@ class Qsys:
         Returns mod^2 of the current state. This function normalizes probabilities
         """
         probs = np.absolute(self.current_state)
-        norm = np.sum(probs) # Calculates the norm of the current wavefunction
-        return probs / norm
-
-    def get_probs(self):
-        return self.current_probs
+        return probs
 
     def measure(self, key):
         """
@@ -142,7 +128,7 @@ class Qsys:
         return self.output()
 
     def collapse(self):
-        POVM = self.POVMs[self.lastOutput][self.lastKey]        
+        POVM = self.POVMs[self.lastOutput][self.lastKey]
         new_state = np.dot(np.sqrt(POVM), self.current_state) / np.dot(self.current_state, np.dot(POVM, self.current_state))
         self.current_state = new_state
 
