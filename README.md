@@ -1,7 +1,9 @@
 # qhord 
-[![Build Status: Still need Test Suite!](https://travis-ci.com/aarongrisez/qhord.svg?token=NKnMzaV57yuvZyF9zLxy&branch=master)](https://travis-ci.com/aarongrisez/qhord)
 
 Qhord is a mobile application for interacting with a quantum mechanical system through a musical interface.
+
+### IMPORTANT NOTE
+This repo has been deprecated. In February 2018, I decided to abandon Kivy as the framework behind Qhord. The primary reason for this was the spotty success I was having with the build system for deploying to mobile devices. We have moved to the Godot engine for continued development and have separated the simulation code into a separate C++ library [qsys](https://github.com/aarongrisez/Qsys). Please email me at aaron@qhord.com if you have any questions.
 
 ![logo](app/src/assets/images/QhordLogo.png?raw=true)
 
@@ -28,7 +30,34 @@ pip install numpy
 pip install scipy
 ```
 
-* kivy - Installation instructions at [kivy](https://kivy.org/docs/installation/installation.html)
+* [Kivy](https://kivy.org/docs/)
+
+#### Install necessary system packages
+```
+sudo apt install -y \
+    python-pip \
+    build-essential \
+    git \
+    python \
+    python-dev \
+    ffmpeg \
+    libsdl2-dev \
+    libsdl2-image-dev \
+    libsdl2-mixer-dev \
+    libsdl2-ttf-dev \
+    libportmidi-dev \
+    libswscale-dev \
+    libavformat-dev \
+    libavcodec-dev \
+    zlib1g-dev
+```
+
+Then you can install kivy with pip:
+```
+pip install kivy
+```
+
+
     * Mac OSX users may also need the tools 'gst-plugins-bad' and 'gst-plugins-good' in addition to the tools listed on the installation guide
 ```
 brew install gst-plugins-bad
